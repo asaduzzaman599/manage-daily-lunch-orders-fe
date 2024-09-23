@@ -10,7 +10,7 @@ const navigation = [
     { name: 'Restaurant', href: '/restaurants', current: true },
     { name: 'Foodpacks', href: '/foodpacks', current: false },
     { name: 'Vote', href: '/vote', current: false },
-    { name: 'Top Voted', href: '/top-voted', current: false },
+    { name: 'Top Voted', href: '/', current: false },
   ]
   
   
