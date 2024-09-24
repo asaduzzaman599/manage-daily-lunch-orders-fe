@@ -1,4 +1,4 @@
-import SignUpForm from "@/components/Auth/SignUpForm"
+import SignUpForm from "@/components/auth/SignUpForm";
 
 export default async  function Signup() {
  /*  const data = await fetch('http://localhost:3001/restaurant',)

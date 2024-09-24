@@ -1,8 +1,42 @@
 'use client'
 
+import { setToLocalStorage } from "@/utils/local-storage"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
 
 export default function LoginForm() {
+  
+  const [state, setState] = useState({
+    phone: '',
+    password: ''
+  })
+
+  function updateInputData(key: string, value: string){
+    setState({...state, [key]: value})
+  }
+
+  const router = useRouter()
+  async function onSubmit(e){
+    e.preventDefault()
+    try{
+      const res = await fetch('http://localhost:3001/employees/login',{
+        method: "POST",
+        body: JSON.stringify(state),
+        headers: {
+          "Content-Type": "application/json",
+        }
+        
+      })
+     const data = await res.json()
+     console.log(data)
+      if(data.status) {
+        setToLocalStorage(JSON.stringify(data.user))
+        router.push('/')
+      }
+    }catch(err){
+      console.log(err)}
+  }
     return (
       <>
         {/*
@@ -27,18 +61,17 @@ export default function LoginForm() {
   
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
             <div className="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
-              <form action="#" method="POST" className="space-y-6">
+              <form onSubmit={onSubmit} className="space-y-6">
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-                    Email address
+                    Phone
                   </label>
                   <div className="mt-2">
                     <input
-                      id="email"
-                      name="email"
-                      type="email"
+                      id="phone"
+                      name="phone"
                       required
-                      autoComplete="email"
+                      onChange={(e) => updateInputData(e.target.name,e.target.value)}
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
                   </div>
@@ -53,7 +86,8 @@ export default function LoginForm() {
                       id="password"
                       name="password"
                       type="password"
-                      required
+                      required 
+                      onChange={(e) => updateInputData(e.target.name,e.target.value)}
                       autoComplete="current-password"
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />

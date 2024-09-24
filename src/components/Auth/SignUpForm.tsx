@@ -1,8 +1,41 @@
 'use client'
 
 import Link from "next/link"
+import { useRouter } from 'next/navigation'
+import { useState } from "react"
+import 'react-toastify/dist/ReactToastify.css'
 
 export default function SignUpForm() {
+
+  const [state, setState] = useState({
+    name: '',
+    phone: '',
+    designation: '',
+    password: ''
+  })
+
+  function updateInputData(key: string, value: string){
+    setState({...state, [key]: value})
+  }
+
+  const router = useRouter()
+  async function onSubmit(e){
+    e.preventDefault()
+    try{
+      const res = await fetch('http://localhost:3001/employees',{
+        method: "POST",
+        body: JSON.stringify(state),
+        headers: {
+          "Content-Type": "application/json",
+        }
+        
+      })
+     const data = await res.json()
+      if(data) router.push('/login')
+    }catch(err){
+      console.log(err)}
+  }
+
     return (
       <>
         {/*
@@ -27,7 +60,7 @@ export default function SignUpForm() {
   
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
             <div className="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
-              <form action="#" method="POST" className="space-y-6">
+              <form action="#" onSubmit={onSubmit} className="space-y-6">
                 
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
@@ -38,6 +71,7 @@ export default function SignUpForm() {
                       id="Name"
                       name="name"
                       required
+                      onChange={(e) => updateInputData(e.target.name,e.target.value)}
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
                   </div>
@@ -51,12 +85,13 @@ export default function SignUpForm() {
                       id="phone"
                       name="phone"
                       required
+                      onChange={(e) => updateInputData(e.target.name,e.target.value)}
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
                   </div>
                 </div>
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+                  <label className="block text-sm font-medium leading-6 text-gray-900">
                   Designation
                   </label>
                   <div className="mt-2">
@@ -64,7 +99,7 @@ export default function SignUpForm() {
                       id="designation"
                       name="designation"
                       required
-                      autoComplete="email"
+                      onChange={(e) => updateInputData(e.target.name,e.target.value)}
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
                   </div>
@@ -81,6 +116,7 @@ export default function SignUpForm() {
                       type="password"
                       required
                       autoComplete="current-password"
+                      onChange={(e) => updateInputData(e.target.name,e.target.value)}
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
                   </div>
@@ -88,12 +124,7 @@ export default function SignUpForm() {
   
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
-                    <input
-                      id="remember-me"
-                      name="remember-me"
-                      type="checkbox"
-                      className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                    />
+                    
 
                   </div>
   

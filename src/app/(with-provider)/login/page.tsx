@@ -1,4 +1,4 @@
-import LoginForm from "@/components/Auth/LoginForm"
+import LoginForm from "@/components/auth/LoginForm";
 
 export default async  function Login() {
  /*  const data = await fetch('http://localhost:3001/restaurant',)
